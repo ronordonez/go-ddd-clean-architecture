@@ -94,6 +94,51 @@ The API will be available at `http://localhost:8080`
 
 ## 📚 API Endpoints
 
+
+## 🔐 Auth — Login endpoint
+
+- Endpoint: `POST /api/v1/login`
+- Purpose: authenticate user and return JWT access token.
+- Request (JSON):
+```json
+{
+  "username": "admin",
+  "password": "admin123"
+}
+```
+- Response (200 OK):
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token_type": "Bearer",
+  "expires_at": "2026-01-30T16:56:59Z"
+}
+```
+- Use: include header `Authorization: Bearer <access_token>` on protected endpoints (e.g., POST /api/v1/products).
+- Notes:
+  - Current implementation: demo in-memory credential check. Replace with real user store and bcrypt password checks for production.
+  - JWT secret is configured via `JWT_SECRET` in `.env`.
+  - Token expiration configured via `JWT_EXPIRATION` (hours).
+
+### Example (curl)
+```bash
+curl -X POST http://localhost:8080/api/v1/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"admin123"}'
+```
+
+### Example (Postman)
+- Method: POST
+- URL: http://localhost:8080/api/v1/login
+- Body → raw → JSON:
+```json
+{
+  "username": "admin",
+  "password": "admin123"
+}
+```
+- Response: copy `access_token` and use Authorization → Bearer Token for subsequent requests.
+
 ### Products
 
 | Method | Endpoint | Auth | Description |
